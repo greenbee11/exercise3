@@ -1,8 +1,8 @@
 /*
 Eric Greenberg
 1/13/25
-Turns on an LED every other time the button is pressed.
-Needs a button and an LED
+Turns on an LED every other time the button is pressed, as long as the other button is pressed
+Needs two buttons and an LED
 
 */
 
@@ -28,9 +28,14 @@ void app_main(void) {
     gpio_set_direction(GPIO_NUM_4, GPIO_MODE_INPUT);
     gpio_pullup_en(GPIO_NUM_4);
 
+    gpio_reset_pin(GPIO_NUM_5);
+    gpio_set_direction(GPIO_NUM_5, GPIO_MODE_INPUT);
+    gpio_pullup_en(GPIO_NUM_5);
+
     bool bstate = false;   // Button state (true = pressed, false = not pressed)
     bool lstate = false;   // LED state (true = ON, false = OFF)
     bool pressed;
+    bool pressedtwo;
 
 
     while (1) {
@@ -41,12 +46,13 @@ void app_main(void) {
         // gpio_set_level(GPIO_NUM_10, 1);
 
         pressed = gpio_get_level(GPIO_NUM_4) == 0;     // Input active low button
-   
-        if (!bstate && pressed) {                  // Released button, is now pressed
+        pressedtwo = gpio_get_level(GPIO_NUM_5) == 0;
+
+        if (!bstate && pressed && pressedtwo) {                  // Released button, is now pressed
             bstate = true;                           // Remember button is pressed  
         }
    
-        if (bstate && !pressed) {                  // Pressed button, is now released
+        if (bstate && !pressed && pressedtwo) {                  // Pressed button, is now released
             lstate = !lstate;                        // Toggle LED state  
             bstate = false;                          // Remember button is released
         }
