@@ -1,3 +1,12 @@
+/*
+Eric Greenberg
+1/13/25
+Turns on an LED every other time the button is pressed.
+Needs a button and an LED
+
+*/
+
+
 #include "freertos/FreeRTOS.h"
 #include "driver/gpio.h"
 
